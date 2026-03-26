@@ -28,5 +28,9 @@ import '@ionic/core/css/display.css';
 // PAGES
 import './pages/login/LoginPage.js';
 import './pages/home/HomePage.js';
-import './pages/produto/ProdutoPage.js';
+
+//PRODUTO
+import './pages/produto/EditProdutoPage.js';
+import './pages/produto/ListProdutoPage.js';
+import './pages/produto/CadProdutoPage.js'
 import './pages/usuario/UsuarioPage.js';

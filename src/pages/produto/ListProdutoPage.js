@@ -1,0 +1,92 @@
+import './ListProdutoPage.css'
+import { createHeader } from '../../shared/Header.js'
+import { logout } from '../../shared/util.js';
+
+const pageName = 'Produto';
+
+class ListProdutoPage extends HTMLElement {
+    connectedCallback() {
+        this.classList.add('ion-page');
+        const cabecalho = createHeader(pageName);
+        this.innerHTML = `
+            ${cabecalho}
+            <ion-content>
+            <div class="list-produto"></div>
+            </ion-content>
+        `;
+        this.querySelector('#logout-btn')
+        .addEventListener('click', logout);
+
+        // buscando os produtos
+        const produtos = JSON.parse(this.fetchProdutos())
+        // renderizando os produtos no HTML
+        this.renderProdutos(this.fetchProdutos());
+    }
+
+    async fetchProdutos() {
+        return ` {
+            {
+                "id": 1,
+                "dsc_produto": "Macarronada",
+                "valor_unit": 20.99,
+                "status": 1
+
+                "id": 2,
+                "dsc_produto": "Pão de queijo",
+                "valor_unit": 08.99,
+                "status": 1
+                
+                 "id": 1,
+                "dsc_produto": "Feijoada",
+                "valor_unit": 119.99,
+                "status": 0 
+    
+            }
+        }`
+    }
+    
+
+
+    renderProdutos(produtos){
+        const container = this.querySelector(".list-produto")
+
+        // SE PRODUTO VAZIO, MOSTRAR MENSAGEM AO USUÁRIO
+        if(produtos.lenght == 0){
+            container.innerHTML = '<p> Nenhum produto encontrado</p>'
+            return;
+        }
+        // FORMATANDO VALORES EM REAIS
+        const formatMoeda = (value) => {
+            return value.toLocaleString('pt-BR' , { style: 'currency', currency: 'BRl'});
+        }
+        const produtoItems = produtos.map(produto => `
+            <ion-item>
+                <ion-label>
+                    <h2 style="display: flex; align-items: center; gap: 8px;">
+                        <ion-icon
+                            name="${produto.status == 1 ? 'checkmark-circle' : 'close-circle'}"
+                            color="${produto.status == 1 ? 'success' : 'danger'}"
+                            style="flex-shrink: 0;"
+                            ></ion-icon>
+                            <span>${produto.dsc_produto}</spam>
+                    </h2>
+                    <p>${formatMoeda(produto.valor_unit)}</p>
+    <ion-label>
+
+    <ion-buttons slot="end">
+            <ion-button fill="clear" class="btn-edit" data-id=${"produto.id"}>
+            <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+             <ion-button>
+               <ion-button fill="clear" color="danger" class="btn-delete" data-id=${"produto.id"}>
+            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+
+            <ion-button>
+            </ion-buttons>
+    <ion-item>
+            `).join('');
+
+            container.innerHTML = `<ion-list>${produtosItems}</ion-list>`;
+    }
+}
+
+customElements.define('list-produto-page', ListProdutoPage);
