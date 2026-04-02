@@ -18,32 +18,38 @@ class ListProdutoPage extends HTMLElement {
         .addEventListener('click', logout);
 
         // buscando os produtos
-        const produtos = JSON.parse(this.fetchProdutos())
+        const produtos = this.fetchProdutos() || [];
+
         // renderizando os produtos no HTML
-        this.renderProdutos(this.fetchProdutos());
+        this.renderProdutos(produtos);
+
     }
 
-    async fetchProdutos() {
-        return ` {
+    fetchProdutos() {
+        return [
             {
                 "id": 1,
-                "dsc_produto": "Macarronada",
+                "dsc_produto": "Café expresso",
                 "valor_unit": 20.99,
                 "status": 1
-
+            },
+            {
                 "id": 2,
-                "dsc_produto": "Pão de queijo",
-                "valor_unit": 08.99,
+                "dsc_produto": "Hamburguer",
+                "valor_unit": 60.99,
                 "status": 1
-                
-                 "id": 1,
+            },
+
+                {
+                "id": 3,
                 "dsc_produto": "Feijoada",
                 "valor_unit": 119.99,
                 "status": 0 
+                }   
+                 
     
-            }
-        }`
-    }
+        ]
+        }
     
 
 
@@ -59,7 +65,7 @@ class ListProdutoPage extends HTMLElement {
         const formatMoeda = (value) => {
             return value.toLocaleString('pt-BR' , { style: 'currency', currency: 'BRl'});
         }
-        const produtoItems = produtos.map(produto => `
+        const produtosItems = produtos.map(produto => `
             <ion-item>
                 <ion-label>
                     <h2 style="display: flex; align-items: center; gap: 8px;">
@@ -68,21 +74,21 @@ class ListProdutoPage extends HTMLElement {
                             color="${produto.status == 1 ? 'success' : 'danger'}"
                             style="flex-shrink: 0;"
                             ></ion-icon>
-                            <span>${produto.dsc_produto}</spam>
+                            <span>${produto.dsc_produto}</span>
                     </h2>
                     <p>${formatMoeda(produto.valor_unit)}</p>
-    <ion-label>
-
+    </ion-label>
+    
     <ion-buttons slot="end">
-            <ion-button fill="clear" class="btn-edit" data-id=${"produto.id"}>
+            <ion-button fill="clear" class="btn-edit" data-id=${produto.id}>
             <ion-icon slot="icon-only" name="create-outline"></ion-icon>
-             <ion-button>
-               <ion-button fill="clear" color="danger" class="btn-delete" data-id=${"produto.id"}>
+             </ion-button>
+               <ion-button fill="clear" color="danger" class="btn-delete" data-id=${produto.id}>
             <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
 
-            <ion-button>
+            </ion-button>
             </ion-buttons>
-    <ion-item>
+    </ion-item>
             `).join('');
 
             container.innerHTML = `<ion-list>${produtosItems}</ion-list>`;
